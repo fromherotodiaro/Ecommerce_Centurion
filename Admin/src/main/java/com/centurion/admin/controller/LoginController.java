@@ -48,7 +48,7 @@ public class LoginController {
                                Model model,
                               HttpSession session){
         try {
-            session.removeAttribute("message");
+//            session.removeAttribute("message");
             if (result.hasErrors()){
                 model.addAttribute("adminDto",adminDto);
                 result.toString();
@@ -60,25 +60,29 @@ public class LoginController {
 
             if (admin != null){
                 model.addAttribute("adminDto",adminDto);
-                session.setAttribute("message","Your email has been registered!");
+                model.addAttribute("emailError","Your email has been registered!");
+//                session.setAttribute("message","Your email has been registered!");
 
                 return "register";
             }
             if (adminDto.getPassword().equals(adminDto.getRepeatPassword())){
                 adminDto.setPassword(passwordEncoder.encode(adminDto.getPassword()));
                 adminService.save(adminDto);
-                session.setAttribute("message","Register Successfully!");
+                model.addAttribute("success","Register Successfully!");
+//                session.setAttribute("message","Register Successfully!");
 
                 return "register";
             }else {
                 model.addAttribute("adminDto",adminDto);
-                session.setAttribute("message","Password is not same!");
+                model.addAttribute("passwordError","Your password maybe wrong! Check again!");
+//                session.setAttribute("message","Password is not same!");
                 return "register";
             }
 
         }catch (Exception e){
             e.printStackTrace();
-            session.setAttribute("message","Can not register because error server!");
+            model.addAttribute("errors","The server has been wrong!");
+//            session.setAttribute("message","Can not register because error server!");
         }
 
         return "register";

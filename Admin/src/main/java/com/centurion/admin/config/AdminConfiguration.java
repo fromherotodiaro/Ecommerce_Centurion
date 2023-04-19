@@ -34,12 +34,15 @@ public class AdminConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-         http.authorizeRequests().antMatchers("/*").permitAll().antMatchers("/admin/*")
+         http.authorizeRequests().antMatchers("/*").permitAll()
+                 .antMatchers("/admin/*")
                 .hasAuthority("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/admin/index")
+                 .loginProcessingUrl("do-login")
+                .defaultSuccessUrl("/index")
+                 .failureForwardUrl("login?error")
                 .permitAll()
                 .and()
                 .logout()
