@@ -34,15 +34,12 @@ public class AdminConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-         http.authorizeRequests().antMatchers("/*").permitAll()
-                 .antMatchers("/admin/*")
+         http.authorizeRequests().antMatchers("/*").permitAll().antMatchers("/admin/*")
                 .hasAuthority("ADMIN")
                 .and()
                 .formLogin()
-                .loginPage("/login")
-                 .loginProcessingUrl("do-login")
-                .defaultSuccessUrl("/index")
-                 .failureForwardUrl("login?error")
+                .loginPage("/login").loginProcessingUrl("/do-login")
+                .defaultSuccessUrl("/admin-home",true)/*.failureForwardUrl("/login?error")*/
                 .permitAll()
                 .and()
                 .logout()
@@ -51,6 +48,27 @@ public class AdminConfiguration {
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
+//        http.authorizeRequests().antMatchers("/admin/**")
+//                .hasRole("ADMIN")
+//                .antMatchers("/anonymous*")
+//                .anonymous()
+//                .antMatchers("/login*")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and().formLogin()
+//                .loginPage("/login")
+//                .loginProcessingUrl("/do-login")
+//                .defaultSuccessUrl("/index", true)
+//                .failureUrl("/login?error").permitAll()
+//                .and()
+//                .logout()
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login?logout")
+//                .permitAll();
+
 
         return http.build();
     }
