@@ -20,6 +20,7 @@ public class AdminDetails implements UserDetails {
 
         for (Role role : admin.getRoles()){
             authorities.add(new SimpleGrantedAuthority(role.getName()));
+
         }
 
         return authorities;
