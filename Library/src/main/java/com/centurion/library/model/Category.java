@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "categories", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Category {
     @Id
@@ -22,7 +23,7 @@ public class Category {
 
     public Category(String name) {
         this.name = name;
-        this.is_deleted = true;
+        this.is_activated = true;
         this.is_deleted = false;
     }
 }

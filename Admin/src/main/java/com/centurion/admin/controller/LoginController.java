@@ -4,6 +4,9 @@ import com.centurion.library.dto.AdminDto;
 import com.centurion.library.model.Admin;
 import com.centurion.library.service.impl.AdminServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,10 +35,14 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/admin-home")
+    @GetMapping("/index")
     public String home(Model model){
         model.addAttribute("title","Home Page");
-        return "admin-home";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return "redirect:/login";
+        }
+        return "index";
     }
 
     @GetMapping("/register")
@@ -44,8 +51,6 @@ public class LoginController {
         model.addAttribute("adminDto",new AdminDto());
         return "register";
     }
-
-
 
     @GetMapping("/forgot-password")
     public String forgotPassword(Model model){

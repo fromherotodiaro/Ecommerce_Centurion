@@ -39,7 +39,7 @@ public class AdminConfiguration {
                 .and()
                 .formLogin()
                 .loginPage("/login").loginProcessingUrl("/do-login")
-                .defaultSuccessUrl("/admin-home",true)/*.failureForwardUrl("/login?error")*/
+                .defaultSuccessUrl("/index",true)/*.failureForwardUrl("/login?error")*/
                 .permitAll()
                 .and()
                 .logout()
