@@ -28,8 +28,8 @@ public class Product {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id", referencedColumnName ="category_id" )
     private Category category;
-    private boolean is_deleted;
-    private boolean is_activated;
+    private boolean isDeleted;
+    private boolean isActivated;
 
 
 }

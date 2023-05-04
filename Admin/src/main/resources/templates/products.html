@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments :: header">
+
+</head>
+
+<body id="page-top">
+
+<!-- Page Wrapper -->
+<div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul th:replace="/fragments :: sidebar">
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav th:replace="/fragments :: topbar"></nav>
+
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+
+                <div th:if="${size == 0}">
+                    <p>No products in shop</p>
+                </div>
+                <div th:if="${success}" class="alert alert-success">
+                    <p th:text="${success}"></p>
+                </div>
+                <div th:if="${error}" class="alert alert-danger">
+                    <p th:text="${error}"></p>
+                </div>
+                <a th:href="@{/add-product}" class="btn btn-primary">Add new product</a>
+                <!-- Page Heading -->
+                <table class="table table-striped" th:if="${size > 0}">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${products}">
+                        <td scope="row" th:text="${product.name}"></td>
+                        <td th:text="${product.category.name}"></td>
+                        <td th:text="${product.costPrice}"></td>
+                        <td th:text="${product.currentQuantity}"></td>
+                        <!--<td><img alt=""  style="height: 10%; width: 10%;" th:src="*{'data:image/jpg;base64,'+{product.image}}"></td>-->
+                        <td><img alt="" style="height: 40px; width: 40px;"
+                                 th:src="@{'data:image/jpg;base64,'+${product.image}}"></td>
+
+                        <td><a class="btn btn-primary" th:href="@{/update-product/{id} (id = ${product.id})}">Update</a>
+                        </td>
+
+                        <td>
+                            <a th:if="${product.isActivated == false}" class="btn btn-warning" th:href="@{/enable-product/{id} (id = ${product.id})}">Enable</a>
+                            <a th:if="${product.isDeleted == false}" class="btn btn-danger" th:href="@{/delete-product/{id} (id = ${product.id})}">Delete</a>
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+            <!--/.container-fluid-->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer th:replace="/fragments :: footer">
+
+        </footer>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a th:replace="/fragments :: scroll">
+
+</a>
+
+<th:block th:replace="/fragments :: script"></th:block>
+
+<script th:src="@{/js/categories.js}"></script>
+</body>
+
+</html>

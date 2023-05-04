@@ -18,6 +18,8 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
+
     @GetMapping("/categories")
     public String categories(Model model, Principal principal){
         if (principal == null){

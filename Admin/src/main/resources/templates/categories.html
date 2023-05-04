@@ -62,8 +62,8 @@
                             <a id="editButton" class="btn btn-primary" th:href="@{/findById/(id = ${category.id})}">Update</a>
                         </td>
                         <td>
-                            <a class="btn btn-warning" th:if="${category.is_activated} == true" th:href="@{/delete-category/(id = ${category.id})}">Delete</a>
-                            <a class="btn btn-primary" th:if="${category.is_activated} == false" th:href="@{/enable-category/(id = ${category.id})}">Enable</a>
+                            <a class="btn btn-warning" th:if="${category.isActivated} == true" th:href="@{/delete-category/(id = ${category.id})}">Delete</a>
+                            <a class="btn btn-primary" th:if="${category.isActivated} == false" th:href="@{/enable-category/(id = ${category.id})}">Enable</a>
                         </td>
                     </tr>
 

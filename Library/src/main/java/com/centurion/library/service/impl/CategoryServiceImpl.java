@@ -35,11 +35,9 @@ public class CategoryServiceImpl implements CategoryService {
         Category categoryUpdate = null;
         try {
             categoryUpdate = categoryRepository.findById(category.getId()).get();
-            System.out.println("________get"+categoryUpdate);
-            System.out.println("________no get"+categoryRepository.findById(category.getId()));
             categoryUpdate.setName(category.getName());
-            categoryUpdate.set_activated(category.is_activated());
-            categoryUpdate.set_deleted(category.is_deleted());
+            categoryUpdate.setActivated(category.isActivated());
+            categoryUpdate.setDeleted(category.isDeleted());
             return categoryRepository.save(categoryUpdate);
         }catch (Exception e){
             e.printStackTrace();
@@ -50,16 +48,21 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteById(Long id) {
         Category category = categoryRepository.getReferenceById(id);
-        category.set_deleted(true);
-        category.set_activated(false);
+        category.setDeleted(true);
+        category.setActivated(false);
         categoryRepository.save(category);
     }
 
     @Override
     public void enableById(Long id) {
         Category category = categoryRepository.getReferenceById(id);
-        category.set_deleted(false);
-        category.set_activated(true);
+        category.setDeleted(false);
+        category.setActivated(true);
         categoryRepository.save(category);
+    }
+
+    @Override
+    public List<Category> findAllByActivated() {
+        return categoryRepository.findAllByActivated();
     }
 }
