@@ -29,13 +29,6 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <form th:action="@{/search-result/0}" method="get">
-
-                    <input type="text" id="search" name="keyword" placeholder="Search products">
-                    <button type="submit" class="btn btn-primary">Search</button>
-
-                </form>
-
                 <div th:if="${size == 0}">
                     <p>No products in shop</p>
                 </div>
@@ -88,17 +81,21 @@
                     <ul class="pagination">
                         <!--<li th:if="${currentPage==0}" class="page-item">-->
                         <li th:if="${currentPage!=0}" class="page-item">
-                            <a class="page-link" th:href="@{'/products/' + ${currentPage - 1} }">Previous</a>
+                            <a class="page-link" th:href="@{'/search-result/' + ${currentPage - 1}(keyword=${param.keyword})  }">Previous</a>
                         </li>
                         <!--#numbers.sequence(1, totalPages) Từ 1 đến totalPages-->
                         <!--th:classappend Nối thêm giá trị vào cho thuộc tính class -->
-                        <li th:each = "i : ${#numbers.sequence(1, totalPages)}"
-                            th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                            <a class="page-link" th:href="@{'/products/'+ ${i - 1}}"><span th:text="${i}"></span></a>
-                        </li>
+                       <!-- + '?keyword='+${param.keyword}-->
+
+                            <li th:each = "i : ${#numbers.sequence(1, totalPages)} "
+                                th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
+                                <a class="page-link" th:href="@{'/search-result/'+ ${i - 1}(keyword=${param.keyword}) }"><span th:text="${i}"></span></a>
+                            </li>
+
                         <!--<li th:if="${(currentPage +1) != totalPages}"  class="page-item">-->
                         <li th:if="${(currentPage +1) != totalPages}"  class="page-item">
-                            <a class="page-link" th:href="@{'/products/' + ${currentPage + 1} }">Next</a>
+                            <!--<a class="page-link" th:href="@{'/search-result/' + ${currentPage + 1} }">Next</a>-->
+                            <a class="page-link" th:href="@{'/search-result/'+ ${currentPage + 1}(keyword=${param.keyword}) }">Next</a>
                         </li>
                     </ul>
                 </nav>

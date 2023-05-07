@@ -7,6 +7,9 @@ import com.centurion.library.repository.ProductRepository;
 import com.centurion.library.service.ProductService;
 import com.centurion.library.utils.ImageUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -157,4 +160,45 @@ public class ProductServiceImpl implements ProductService {
         product.setDeleted(false);
         productRepository.save(product);
     }
+
+    @Override
+    public Page<Product> pageProduct(int PageNo) {
+        Pageable pageable = PageRequest.of(PageNo,1);
+        Page<Product> productPage = productRepository.pageProduct(pageable);
+
+        return productPage;
+    }
+
+    @Override
+    public Page<Product> searchProduct(int PageNo ,String keyword) {
+
+        Pageable pageable = PageRequest.of(PageNo,5);
+
+        Page<Product> products = productRepository.searchProduct(keyword,pageable);
+
+        return products;
+    }
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

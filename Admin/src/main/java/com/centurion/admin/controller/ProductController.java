@@ -6,6 +6,7 @@ import com.centurion.library.model.Product;
 import com.centurion.library.service.CategoryService;
 import com.centurion.library.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,6 +40,26 @@ public class ProductController {
         return "products";
     }
 
+    @GetMapping("/search-result/{pageNo}")
+    public String searchProducts(@PathVariable("pageNo")int pageNo,
+                                 @RequestParam("keyword") String keyword,
+                                 Model model,
+                                 Principal principal ){
+
+        if (principal == null){
+            return "redirect:/login";
+        }
+
+        Page<Product> products = productService.searchProduct(pageNo,keyword);
+
+        model.addAttribute("title","Search Result");
+        model.addAttribute("products",products);
+        model.addAttribute("size",products.getSize());
+        model.addAttribute("totalPages",products.getTotalPages());
+        model.addAttribute("currentPage",pageNo);
+        return "result-products";
+    }
+
     @GetMapping("/add-product")
     public String addProductForm(Model model, Principal principal){
         if (principal == null){
@@ -48,6 +69,21 @@ public class ProductController {
         model.addAttribute("categories", categories);
         model.addAttribute("product", new ProductDto());
         return "add-product";
+    }
+
+    @GetMapping("/products/{pageNo}")
+    public String productsPage(@PathVariable("pageNo") int pageNo, Model model, Principal principal){
+        if (principal == null){
+            return "redirect:/login";
+        }
+        Page<Product> products = productService.pageProduct(pageNo);
+        model.addAttribute("title","Manage Product");
+        model.addAttribute("size",products.getSize());
+        model.addAttribute("totalPages",products.getTotalPages());
+        model.addAttribute("currentPage",pageNo);
+        model.addAttribute("products",products);
+
+        return "products";
     }
 
     @PostMapping("/save-product")
