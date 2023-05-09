@@ -7,6 +7,7 @@ import com.centurion.library.service.CategoryService;
 import com.centurion.library.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,23 +41,33 @@ public class ProductController {
         return "products";
     }
 
-    @GetMapping("/search-result/{pageNo}")
+    @GetMapping("/search-result/{pageNo}/{sortField}/{sortDir}")
     public String searchProducts(@PathVariable("pageNo")int pageNo,
                                  @RequestParam("keyword") String keyword,
+                                 @PathVariable("sortField") String sortField,
+                                 @PathVariable("sortDir") String sortDir,
                                  Model model,
                                  Principal principal ){
-
         if (principal == null){
             return "redirect:/login";
         }
 
-        Page<Product> products = productService.searchProduct(pageNo,keyword);
+        if (sortField == null && sortDir == null){
+            sortField="id";
+            sortDir="asc";
+        }
 
+        Page<Product> products = productService.searchProduct(pageNo,keyword,sortField,sortDir);
         model.addAttribute("title","Search Result");
         model.addAttribute("products",products);
         model.addAttribute("size",products.getSize());
+        model.addAttribute("totalItems",products.getTotalElements());
         model.addAttribute("totalPages",products.getTotalPages());
         model.addAttribute("currentPage",pageNo);
+        //Sort
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         return "result-products";
     }
 
@@ -71,17 +82,28 @@ public class ProductController {
         return "add-product";
     }
 
-    @GetMapping("/products/{pageNo}")
-    public String productsPage(@PathVariable("pageNo") int pageNo, Model model, Principal principal){
+    @GetMapping("/products/{pageNo}/{sortField}/{sortDir}")
+    public String productsPage(Model model,
+                               @PathVariable("pageNo") int pageNo,
+                               @PathVariable("sortField") String sortField,
+                               @PathVariable("sortDir") String sortDir,
+
+                               Principal principal){
         if (principal == null){
             return "redirect:/login";
         }
-        Page<Product> products = productService.pageProduct(pageNo);
+
+        Page<Product> products = productService.pageProduct(pageNo,sortField,sortDir);
         model.addAttribute("title","Manage Product");
         model.addAttribute("size",products.getSize());
+        model.addAttribute("totalItems",products.getTotalElements());
         model.addAttribute("totalPages",products.getTotalPages());
         model.addAttribute("currentPage",pageNo);
         model.addAttribute("products",products);
+        //Sort
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
         return "products";
     }

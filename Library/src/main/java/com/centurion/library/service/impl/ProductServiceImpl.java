@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,12 +57,6 @@ public class ProductServiceImpl implements ProductService {
 
         try
         {
-//            String fileName = StringUtils.cleanPath(imageProduct.getOriginalFilename());
-//            if(fileName.contains(".."))
-//            {
-//                System.out.println("not a a valid file");
-//            }
-
             Product product = new Product();
             if (imageProduct == null || imageProduct.isEmpty()){
                 product.setImage(null);
@@ -108,12 +103,7 @@ public class ProductServiceImpl implements ProductService {
             product.setCostPrice(productDto.getCostPrice());
             product.setCurrentQuantity(productDto.getCurrentQuantity());
             product.setCategory(productDto.getCategory());
-//            product.setDeleted(false);
-//            product.setActivated(true);
 
-            System.out.println(product.getName()+"___"+product.getCategory());
-
-//            return product;
             return productRepository.save(product);
 
         }catch (Exception e){
@@ -162,17 +152,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> pageProduct(int PageNo) {
-        Pageable pageable = PageRequest.of(PageNo,1);
+    public Page<Product> pageProduct(int PageNo,String sortField, String sortDir) {
+        Pageable pageable = PageRequest.of(PageNo,3, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+
         Page<Product> productPage = productRepository.pageProduct(pageable);
 
         return productPage;
     }
 
     @Override
-    public Page<Product> searchProduct(int PageNo ,String keyword) {
+    public Page<Product> searchProduct(int PageNo ,String keyword,String sortField, String sortDir) {
 
-        Pageable pageable = PageRequest.of(PageNo,5);
+//        if (sortField == null && sortDir == null){
+//            sortField="id";
+//            sortDir="asc";
+//        }
+        Pageable pageable = PageRequest.of(PageNo,3, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
 
         Page<Product> products = productRepository.searchProduct(keyword,pageable);
 

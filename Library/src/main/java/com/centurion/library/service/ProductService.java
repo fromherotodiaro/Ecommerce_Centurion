@@ -16,9 +16,9 @@ public interface ProductService {
     void deleteById(Long id);
     void enableById(Long id);
 
-    Page<Product> pageProduct(int PageNo);
+    Page<Product> pageProduct(int PageNo,String sortField, String sortDir);
 
-    Page<Product> searchProduct(int PageNo ,String keyword);
+    Page<Product> searchProduct(int PageNo ,String keyword,String sortField, String sortDir);
 
 
 }

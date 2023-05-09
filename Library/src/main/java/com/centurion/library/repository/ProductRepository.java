@@ -18,3 +18,10 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("Select p from Product p where p.description like %?1% or p.name like %?1%"  ) /*?1 là tham số thứ nhất keyword(Tương tự ?2,?3 nếu có)*/
     Page<Product> searchProduct(String keyword, Pageable pageable);
 }
+
+
+
+
+
+
+

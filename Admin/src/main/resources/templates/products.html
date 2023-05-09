@@ -26,10 +26,11 @@
 
             <!-- End of Topbar -->
 
+            <!--'?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}-->
             <!-- Begin Page Content -->
             <div class="container-fluid">
 
-                <form th:action="@{/search-result/0}" method="get">
+                <form th:action="@{/search-result/0/id/asc }" method="get">
 
                     <input type="text" id="search" name="keyword" placeholder="Search products">
                     <button type="submit" class="btn btn-primary">Search</button>
@@ -50,10 +51,13 @@
                 <table class="table table-striped" th:if="${size > 0}">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col"><a th:href="@{'/products/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}}">Id</a>  </th>
+                        <th scope="col"><a th:href="@{'/products/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}}">Name</a>  </th>
+                        <th scope="col"><a th:href="@{'/products/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}}">Category</a>  </th>
+                        <th scope="col"><a th:href="@{'/products/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}}">Price</a>  </th>
+                        <th scope="col"><a th:href="@{'/products/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}}">salePrice</a>  </th>
+                        <th scope="col"><a th:href="@{'/products/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}}">Quantity</a>  </th>
+
                         <th scope="col">Image</th>
                         <th scope="col">Update</th>
                         <th scope="col">Action</th>
@@ -61,9 +65,11 @@
                     </thead>
                     <tbody>
                     <tr th:each="product : ${products}">
-                        <td scope="row" th:text="${product.name}"></td>
+                        <td th:text="${product.id}"></td>
+                        <td th:text="${product.name}"></td>
                         <td th:text="${product.category.name}"></td>
                         <td th:text="${product.costPrice}"></td>
+                        <td th:text="${product.salePrice}"></td>
                         <td th:text="${product.currentQuantity}"></td>
                         <!--<td><img alt=""  style="height: 10%; width: 10%;" th:src="*{'data:image/jpg;base64,'+{product.image}}"></td>-->
                         <td><img alt="" style="height: 40px; width: 40px;"
@@ -83,22 +89,35 @@
 
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center">
+                    Total Items: [[${totalItems}]] - Page [[${currentPage +1}]] of [[${totalPages}]]
+                </div>
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center">
 
-                <nav aria-label="Page navigation example">
                     <ul class="pagination">
+
                         <!--<li th:if="${currentPage==0}" class="page-item">-->
                         <li th:if="${currentPage!=0}" class="page-item">
-                            <a class="page-link" th:href="@{'/products/' + ${currentPage - 1} }">Previous</a>
+                            <a class="page-link" th:href="@{'/products/' + ${0} + '/' + ${sortField} + '/' + ${sortDir} }">First</a>
+                        </li>
+
+                        <li th:if="${currentPage!=0}" class="page-item">
+                            <a class="page-link" th:href="@{'/products/' + ${currentPage - 1} + '/' + ${sortField} + '/' + ${sortDir} }">Previous</a>
                         </li>
                         <!--#numbers.sequence(1, totalPages) Từ 1 đến totalPages-->
                         <!--th:classappend Nối thêm giá trị vào cho thuộc tính class -->
+
                         <li th:each = "i : ${#numbers.sequence(1, totalPages)}"
                             th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                            <a class="page-link" th:href="@{'/products/'+ ${i - 1}}"><span th:text="${i}"></span></a>
+                            <a class="page-link" th:href="@{'/products/'+ ${i - 1}+'/' + ${sortField} + '/' + ${sortDir}  }"><span th:text="${i}"></span></a>
                         </li>
                         <!--<li th:if="${(currentPage +1) != totalPages}"  class="page-item">-->
                         <li th:if="${(currentPage +1) != totalPages}"  class="page-item">
-                            <a class="page-link" th:href="@{'/products/' + ${currentPage + 1} }">Next</a>
+                            <a class="page-link" th:href="@{'/products/' + ${currentPage + 1} +'/' + ${sortField} + '/' + ${sortDir} }">Next</a>
+                        </li>
+
+                        <li th:if="${(currentPage +1) != totalPages}"  class="page-item">
+                            <a class="page-link" th:href="@{'/products/' + ${totalPages - 1} +'/' + ${sortField} + '/' + ${sortDir} }">Last</a>
                         </li>
                     </ul>
                 </nav>

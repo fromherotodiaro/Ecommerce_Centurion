@@ -43,10 +43,13 @@
                 <table class="table table-striped" th:if="${size > 0}">
                     <thead>
                     <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Quantity</th>
+                        <th scope="col"><a th:href="@{'/search-result/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}(keyword=${param.keyword})}">Id</a>  </th>
+                        <th scope="col"><a th:href="@{'/search-result/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}(keyword=${param.keyword})}">Name</a>  </th>
+                        <th scope="col"><a th:href="@{'/search-result/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}(keyword=${param.keyword})}">Category</a>  </th>
+                        <th scope="col"><a th:href="@{'/search-result/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}(keyword=${param.keyword})}">Price</a>  </th>
+                        <th scope="col"><a th:href="@{'/search-result/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}(keyword=${param.keyword})}">salePrice</a>  </th>
+                        <th scope="col"><a th:href="@{'/search-result/' + ${currentPage} + '/' + ${sortField} + '/' + ${reverseSortDir}(keyword=${param.keyword})}">Quantity</a>  </th>
+
                         <th scope="col">Image</th>
                         <th scope="col">Update</th>
                         <th scope="col">Action</th>
@@ -54,9 +57,11 @@
                     </thead>
                     <tbody>
                     <tr th:each="product : ${products}">
+                        <td scope="row" th:text="${product.id}"></td>
                         <td scope="row" th:text="${product.name}"></td>
                         <td th:text="${product.category.name}"></td>
                         <td th:text="${product.costPrice}"></td>
+                        <td th:text="${product.salePrice}"></td>
                         <td th:text="${product.currentQuantity}"></td>
                         <!--<td><img alt=""  style="height: 10%; width: 10%;" th:src="*{'data:image/jpg;base64,'+{product.image}}"></td>-->
                         <td><img alt="" style="height: 40px; width: 40px;"
@@ -76,12 +81,18 @@
 
                     </tbody>
                 </table>
-
-                <nav aria-label="Page navigation example">
+                <div class="d-flex justify-content-center">
+                    Total Items: [[${totalItems}]] - Page [[${currentPage +1}]] of [[${totalPages}]]
+                </div>
+                <nav aria-label="Page navigation example" class="d-flex justify-content-center">
                     <ul class="pagination">
                         <!--<li th:if="${currentPage==0}" class="page-item">-->
                         <li th:if="${currentPage!=0}" class="page-item">
-                            <a class="page-link" th:href="@{'/search-result/' + ${currentPage - 1}(keyword=${param.keyword})  }">Previous</a>
+                            <a class="page-link" th:href="@{'/search-result/' + ${0}+ '/' + ${sortField} + '/' + ${sortDir}(keyword=${param.keyword}) }">First</a>
+                        </li>
+
+                        <li th:if="${currentPage!=0}" class="page-item">
+                            <a class="page-link" th:href="@{'/search-result/' + ${currentPage - 1}+ '/' + ${sortField} + '/' + ${sortDir}(keyword=${param.keyword})  }">Previous</a>
                         </li>
                         <!--#numbers.sequence(1, totalPages) Từ 1 đến totalPages-->
                         <!--th:classappend Nối thêm giá trị vào cho thuộc tính class -->
@@ -89,13 +100,16 @@
 
                             <li th:each = "i : ${#numbers.sequence(1, totalPages)} "
                                 th:classappend="${currentPage == i - 1 ? 'active' : ''}" class="page-item">
-                                <a class="page-link" th:href="@{'/search-result/'+ ${i - 1}(keyword=${param.keyword}) }"><span th:text="${i}"></span></a>
+                                <a class="page-link" th:href="@{'/search-result/'+ ${i - 1}+ '/' + ${sortField} + '/' + ${sortDir}(keyword=${param.keyword}) }"><span th:text="${i}"></span></a>
                             </li>
 
                         <!--<li th:if="${(currentPage +1) != totalPages}"  class="page-item">-->
                         <li th:if="${(currentPage +1) != totalPages}"  class="page-item">
                             <!--<a class="page-link" th:href="@{'/search-result/' + ${currentPage + 1} }">Next</a>-->
-                            <a class="page-link" th:href="@{'/search-result/'+ ${currentPage + 1}(keyword=${param.keyword}) }">Next</a>
+                            <a class="page-link" th:href="@{'/search-result/'+ ${currentPage + 1}+ '/' + ${sortField} + '/' + ${sortDir}(keyword=${param.keyword}) }">Next</a>
+                        </li>
+                        <li th:if="${(currentPage +1) != totalPages}"  class="page-item">
+                            <a class="page-link" th:href="@{'/search-result/' + ${totalPages - 1}+ '/' + ${sortField} + '/' + ${sortDir}(keyword=${param.keyword}) }">Last</a>
                         </li>
                     </ul>
                 </nav>
